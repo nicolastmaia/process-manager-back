@@ -2,13 +2,25 @@ var { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-class AreaService {
+class ProcessService {
   constructor() {}
 
-  async findMany(includeProcess = false) {
+  async findMany() {
     try {
-      const result = await prisma.area.findMany({
-        include: { processes: { include: { process: includeProcess } } },
+      const result = await prisma.process.findMany();
+      console.log(result);
+      prisma.$disconnect();
+      return result;
+    } catch (error) {
+      prisma.$disconnect();
+      throw error;
+    }
+  }
+
+  async findOne(processId) {
+    try {
+      const result = await prisma.process.findUnique({
+        where: { id: parseInt(processId) },
       });
       console.log(result);
       prisma.$disconnect();
@@ -19,11 +31,9 @@ class AreaService {
     }
   }
 
-  async findOne(areaId) {
+  async create(process) {
     try {
-      const result = await prisma.area.findUnique({
-        where: { id: parseInt(areaId) },
-      });
+      const result = await prisma.process.create(process);
       console.log(result);
       prisma.$disconnect();
       return result;
@@ -33,23 +43,11 @@ class AreaService {
     }
   }
 
-  async create(area) {
+  async update(id, updatedProcess) {
     try {
-      const result = await prisma.area.create(area);
-      console.log(result);
-      prisma.$disconnect();
-      return result;
-    } catch (error) {
-      prisma.$disconnect();
-      throw error;
-    }
-  }
-
-  async update(id, updatedArea) {
-    try {
-      const result = await prisma.area.update({
+      const result = await prisma.process.update({
         where: { id: parseInt(id) },
-        data: updatedArea,
+        data: updatedProcess,
       });
       console.log(result);
       prisma.$disconnect();
@@ -60,10 +58,10 @@ class AreaService {
     }
   }
 
-  async delete(areaId) {
+  async delete(processId) {
     try {
-      const result = await prisma.area.delete({
-        where: { id: parseInt(areaId) },
+      const result = await prisma.process.delete({
+        where: { id: parseInt(processId) },
       });
       console.log(result);
       prisma.$disconnect();
@@ -75,4 +73,4 @@ class AreaService {
   }
 }
 
-module.exports = new AreaService();
+module.exports = new ProcessService();

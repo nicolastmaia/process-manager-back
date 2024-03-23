@@ -3,11 +3,16 @@ var router = express.Router();
 
 const areaService = require('../services/areaService');
 
-/* GET processes listing. */
 router.get('/', async function (req, res, next) {
+  const includeProcess = undefined;
+
+  if (req.query.includeProcess)
+    includeProcess =
+      req.query.includeProcess.toLocaleLowerCase() === 'true'.toLowerCase();
+
   try {
-    allAreas = await areaService.findMany();
-    res.json(allAreas);
+    const result = await areaService.findMany(includeProcess);
+    res.json(result);
   } catch (error) {
     res.status(400);
     res.send(error);
@@ -16,8 +21,8 @@ router.get('/', async function (req, res, next) {
 
 router.get('/findOne/:id', async function (req, res, next) {
   try {
-    area = await areaService.findOne(req.params.id);
-    res.json(area);
+    const result = await areaService.findOne(req.params.id);
+    res.json(result);
   } catch (error) {
     res.status(404);
     res.semd(error);
@@ -26,9 +31,9 @@ router.get('/findOne/:id', async function (req, res, next) {
 
 router.post('/create/', async function (req, res, next) {
   try {
-    area = await areaService.create(req.body);
+    const result = await areaService.create(req.body);
     res.status(201);
-    res.json(area);
+    res.json(result);
   } catch (error) {
     res.status(404);
     res.send(error);
@@ -37,9 +42,9 @@ router.post('/create/', async function (req, res, next) {
 
 router.put('/update/:id', async function (req, res, next) {
   try {
-    area = await areaService.update(req.params.id, req.body);
+    const result = await areaService.update(req.params.id, req.body);
     res.status(201);
-    res.json(area);
+    res.json(result);
   } catch (error) {
     res.status(404);
     res.send(error);
@@ -48,8 +53,8 @@ router.put('/update/:id', async function (req, res, next) {
 
 router.delete('/delete/:id', async function (req, res, next) {
   try {
-    area = await areaService.delete(req.params.id);
-    res.json(area);
+    const result = await areaService.delete(req.params.id);
+    res.json(result);
   } catch (error) {
     res.status(404);
     res.semd(error);

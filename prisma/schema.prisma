@@ -27,26 +27,27 @@ model Process {
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   areas ProcessesInAreas[]
-  parentProcess ProcessFamily[]  @relation("parentProcess")
-  childProcess ProcessFamily[] @relation("childProcess")
-}
-
-model ProcessFamily{
-  parentProcess Process  @relation("parentProcess", fields: [parentProcessId], references: [id])
-  parentProcessId Int
-  childProcess Process @relation("childProcess", fields: [childProcessId], references: [id])
-  childProcessId Int
-  toolLink String
-
-  @@id([parentProcessId, childProcessId])
+  parentId Int?
+  parentProcess Process?  @relation("childProcess" , fields: [parentId], references: [id])
+  childProcess Process[] @relation("childProcess")
 }
 
 model ProcessesInAreas{
-  @@id([areaId, processId])
+  id Int @id @default(autoincrement())
 
-  area Area @relation(fields: [areaId], references: [id])
-  areaId Int
-  process Process @relation(fields: [processId], references: [id])
-  processId Int
-  toolLink String
+  area Area? @relation(fields: [areaId], references: [id])
+  areaId Int?
+  process Process? @relation(fields: [processId], references: [id])
+  processId Int?
+  toolLink String?
 }
+
+// model ProcessFamily{
+//   id Int @id @default(autoincrement())
+
+//   parentProcess Process? @relation("parentProcess", fields: [parentProcessId], references: [id])
+//   parentProcessId Int?
+//   childProcess Process? @relation("childProcess", fields: [childProcessId], references: [id])
+//   childProcessId Int?
+//   toolLink String?
+// }
