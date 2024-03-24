@@ -4,7 +4,7 @@ var router = express.Router();
 const areaService = require('../services/areaService');
 
 router.get('/', async function (req, res, next) {
-  const includeProcess = undefined;
+  let includeProcess = undefined;
 
   if (req.query.includeProcess)
     includeProcess =

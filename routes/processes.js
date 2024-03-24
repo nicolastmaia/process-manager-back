@@ -4,14 +4,23 @@ var router = express.Router();
 const processService = require('../services/processService');
 
 router.get('/', async function (req, res, next) {
-  const includeArea = undefined;
+  let includeArea = undefined;
+  let includeChildProcess = undefined;
 
-  if (req.query.includeProcess)
+  if (req.query.includeArea)
     includeArea =
       req.query.includeArea.toLocaleLowerCase() === 'true'.toLowerCase();
 
+  if (req.query.includeChildProcess)
+    includeChildProcess =
+      req.query.includeChildProcess.toLocaleLowerCase() ===
+      'true'.toLowerCase();
+
   try {
-    const result = await processService.findMany(includeArea);
+    const result = await processService.findMany(
+      includeArea,
+      includeChildProcess
+    );
     res.json(result);
   } catch (error) {
     res.status(400);

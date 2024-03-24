@@ -18,7 +18,7 @@ model Area {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
-  processes ProcessesInAreas[]
+  processes Process[]
 }
 
 model Process {
@@ -26,28 +26,10 @@ model Process {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
-  areas ProcessesInAreas[]
+  areaId Int
+  area Area @relation(fields: [areaId], references: [id])
   parentId Int?
   parentProcess Process?  @relation("childProcess" , fields: [parentId], references: [id])
   childProcess Process[] @relation("childProcess")
-}
-
-model ProcessesInAreas{
-  id Int @id @default(autoincrement())
-
-  area Area? @relation(fields: [areaId], references: [id])
-  areaId Int?
-  process Process? @relation(fields: [processId], references: [id])
-  processId Int?
   toolLink String?
 }
-
-// model ProcessFamily{
-//   id Int @id @default(autoincrement())
-
-//   parentProcess Process? @relation("parentProcess", fields: [parentProcessId], references: [id])
-//   parentProcessId Int?
-//   childProcess Process? @relation("childProcess", fields: [childProcessId], references: [id])
-//   childProcessId Int?
-//   toolLink String?
-// }

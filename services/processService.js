@@ -5,9 +5,14 @@ const prisma = new PrismaClient();
 class ProcessService {
   constructor() {}
 
-  async findMany() {
+  async findMany(includeArea = false, includeChildProcess = false) {
     try {
-      const result = await prisma.process.findMany();
+      const result = await prisma.process.findMany({
+        include: {
+          areas: includeArea,
+          childProcess: includeChildProcess,
+        },
+      });
       console.log(result);
       prisma.$disconnect();
       return result;
