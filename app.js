@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var processesRouter = require('./routes/processes');
@@ -9,6 +10,7 @@ var areasRouter = require('./routes/areas');
 
 var app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,4 +36,4 @@ app.use(function (err, req, res, next) {
   res.send('error');
 });
 
-app.listen(8001);
+app.listen(8000);

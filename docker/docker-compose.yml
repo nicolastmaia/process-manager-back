@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  stage-postgres:
+    image: postgres:16
+    restart: 'no'
+    networks:
+      - stage-net
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=stagedb
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    volumes:
+      - stage-postgres-data:/var/lib/postgresql/data
+
+  stage-back:
+    image: stage-back:1.0.0
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    depends_on:
+      - stage-postgres
+    restart: always
+    privileged: true
+    networks:
+      - stage-net
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - '8000:8000'
+
+volumes:
+  stage-postgres-data:
+
+networks:
+  stage-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.26.0.0/16
