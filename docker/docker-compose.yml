@@ -16,7 +16,7 @@ services:
       - stage-postgres-data:/var/lib/postgresql/data
 
   stage-back:
-    image: stage-back:1.0.0
+    image: stage-back:1.0.2
     build:
       context: ..
       dockerfile: ./Dockerfile

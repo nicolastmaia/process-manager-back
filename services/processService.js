@@ -65,12 +65,17 @@ class ProcessService {
 
   async delete(processId) {
     try {
-      const result = await prisma.process.delete({
+      const subPprocessDeleteResult = await prisma.process.deleteMany({
+        where: { parentId: parseInt(processId) },
+      });
+
+      const processDeleteResult = await prisma.process.delete({
         where: { id: parseInt(processId) },
       });
-      console.log(result);
+
+      console.log(processDeleteResult);
       prisma.$disconnect();
-      return result;
+      return processDeleteResult;
     } catch (error) {
       prisma.$disconnect();
       throw error;

@@ -62,12 +62,17 @@ class AreaService {
 
   async delete(areaId) {
     try {
-      const result = await prisma.area.delete({
+      const processDeleteResult = await prisma.process.deleteMany({
+        where: { areaId: parseInt(areaId) },
+      });
+
+      const areaDeleteResult = await prisma.area.delete({
         where: { id: parseInt(areaId) },
       });
-      console.log(result);
+
+      console.log(areaDeleteResult);
       prisma.$disconnect();
-      return result;
+      return areaDeleteResult;
     } catch (error) {
       prisma.$disconnect();
       throw error;
